@@ -1,0 +1,21 @@
+{
+    "name": "nofuture17/seo_filter",
+    "description": "seo filter class",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "nofuture17",
+            "email": "ar2041@bk.ru"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "nofuture17\\seo_filter\\": "src"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.8"
+    }
+}
