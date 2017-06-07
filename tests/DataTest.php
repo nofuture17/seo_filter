@@ -13,7 +13,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Проверка создания данных
-     * @depends testFill
+     * @test
      */
     public function testCreate()
     {

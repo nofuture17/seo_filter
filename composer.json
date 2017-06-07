@@ -15,7 +15,15 @@
             "nofuture17\\seo_filter\\": "src"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "nofuture17\\seo_filter_tests\\": "tests"
+        }
+    },
     "require-dev": {
         "phpunit/phpunit": "4.8"
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }
