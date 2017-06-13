@@ -2,6 +2,7 @@
 
 namespace nofuture17\seo_filter_tests;
 use nofuture17\seo_filter\Data;
+use nofuture17\seo_filter\FieldFactory;
 
 /**
  * Created by PhpStorm.
@@ -15,7 +16,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      * Проверка создания данных
      * @test
      */
-    public function testCreate()
+    public function testMainFilterData()
     {
         // Проверка ошибки при пустых данных
         $data = $this->generateDataArray(['empty' => true]);
@@ -55,14 +56,86 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * - проверить ошибки поля
+     * - проверить сортировку
+     * @test
+     * @depends testMainFilterData
+     */
+    public function testFieldsData()
+    {
+        $fieldsData = $this->getFieldsData();
+
+        // Проверка ошибки при отсутсвии url поля
+        $data = $fieldsData;
+        unset($data[0]['url']);
+        $data = $this->generateDataArray(['fieldsData' => $data]);
+        $function = function () use ($data) {
+            new Data($data);
+        };
+        $exception = Helper::getException($function);
+        $code = null;
+        if ($exception instanceof \Exception) {
+            $code = $exception->getCode();
+        }
+        $this->assertEquals($code, Data::EXCEPTION_CODE_INVALID_FIELD_DATA);
+
+
+        // Проверка ошибки при отсутсвии имени поля
+        $data = $fieldsData;
+        unset($data[0]['name']);
+        $data = $this->generateDataArray(['fieldsData' => $data]);
+        $function = function () use ($data) {
+            new Data($data);
+        };
+        $exception = Helper::getException($function);
+        $code = null;
+        if ($exception instanceof \Exception) {
+            $code = $exception->getCode();
+        }
+        $this->assertEquals($code, Data::EXCEPTION_CODE_INVALID_FIELD_DATA);
+
+        // Проверка ошибки при отсутсвии типа поля
+        $data = $fieldsData;
+        unset($data[0]['type']);
+        $data = $this->generateDataArray(['fieldsData' => $data]);
+        $function = function () use ($data) {
+            new Data($data);
+        };
+        $exception = Helper::getException($function);
+        $code = null;
+        if ($exception instanceof \Exception) {
+            $code = $exception->getCode();
+        }
+        $this->assertEquals($code, Data::EXCEPTION_CODE_INVALID_FIELD_DATA);
+
+        // Проверка отсутствия ошибки при нормальных данных
+        $data = $fieldsData;
+        $data = $this->generateDataArray(['fieldsData' => $data]);
+        $function = function () use ($data) {
+            new Data($data);
+        };
+        $exception = Helper::getException($function);
+        $code = null;
+        if ($exception instanceof \Exception) {
+            $code = $exception->getCode();
+        }
+        $this->assertEquals($code, null);
+
+        // Проверка всех полей
+        $data = $this->generateDataArray(['fieldsData' => $fieldsData]);
+        $dataObject = new Data($data);
+        $this->assertEquals(count($fieldsData), count($dataObject->fields));
+
+
+    }
+
+    /**
      * Сгенерировать данные для Data
      * @return array
      */
-    protected function generateDataArray($params = [])
+    public function generateDataArray($params = [])
     {
-        $result = [
-
-        ];
+        $result = [];
 
         if (!empty($params['empty'])) {
             return [];
@@ -70,6 +143,39 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $result['name'] = (empty($params['noName'])) ? 'Нестовое название фильтра' : '';
         $result['url'] = (empty($params['noUrl'])) ? '/test-filter-url' : '';
+
+        if (isset($params['fieldsData'])) {
+            $result['fieldsData'] = $params['fieldsData'];
+        }
+
+        return $result;
+    }
+
+    public function getFieldsData($params = [])
+    {
+        $result = [
+            [
+                'name' => 'Тестовое название поля',
+                'url' => 'test-field',
+                'type' => FieldFactory::TYPE_CHECKBOX,
+                'priority' => 1000,
+                'inputData' => []
+            ],
+            [
+                'name' => 'Тестовое название поля 2',
+                'url' => 'test-field2',
+                'type' => FieldFactory::TYPE_RADIO,
+                'priority' => 100,
+                'inputData' => []
+            ],
+            [
+                'name' => 'Тестовое название поля 3',
+                'url' => 'test-field3',
+                'type' => FieldFactory::TYPE_RANGE,
+                'priority' => 400,
+                'inputData' => []
+            ],
+        ];
 
         return $result;
     }
