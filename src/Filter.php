@@ -27,12 +27,23 @@ class Filter
     public $fields;
     public $name;
     public $url;
+    public $urlPrefix = '/f/';
     public $text;
-    public $fieldsSet;
 
     public function __construct($data, $config = [])
     {
         $this->init($data, $config);
+    }
+
+
+    public function getBaseUrl()
+    {
+        return $this->urlPrefix . $this->url;
+    }
+
+    public function getCurrentUrl()
+    {
+        return $this->getBaseUrl();
     }
 
     protected function init($data, $config)
@@ -74,28 +85,24 @@ class Filter
         if (!empty($data->fields)) {
             $this->setFields($data->fields);
         }
+
+        if (!empty($data->fieldsSet)) {
+            $this->fields->itemsSet = $data->fieldsSet;
+        }
     }
 
     public function setValue(ValueFilter $value)
     {
+        if ($value->isEmpty()) {
+            return null;
+        }
 
+        $this->fields->setValues($value->fields);
     }
 
     public function getFields($order = null, $ignoreFieldsSet = false)
     {
-        $result = [];
-
-        $fields = $this->fields->getItems($order);
-
-        if (!$ignoreFieldsSet && !empty($this->fieldsSet) && is_array($this->fieldsSet)) {
-            foreach ($fields as $field) {
-                if (in_array($field['url'], $this->fieldsSet)) {
-                    $result[$field['url']] = $field;
-                }
-            }
-        }
-
-        return $result;
+        return $this->fields->getItems($order, $ignoreFieldsSet);
     }
 
     public function setFields($fieldsData)

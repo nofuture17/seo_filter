@@ -9,7 +9,22 @@
 namespace nofuture17\seo_filter;
 
 
+use nofuture17\seo_filter\Traits\ListField;
+
 class FieldSelect extends Field
 {
+    use ListField;
 
+    public function validateValue($value)
+    {
+        $trueValue = null;
+
+        $value = call_user_func([$this->valueClass, 'clearValue'], $value);
+
+        if ($this->inputData->hasItem($value)) {
+            $trueValue = $value;
+        }
+
+        return $trueValue;
+    }
 }

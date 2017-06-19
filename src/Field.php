@@ -9,7 +9,7 @@
 namespace nofuture17\seo_filter;
 
 
-class Field extends Item
+abstract class Field extends Item
 {
     const ACTIVE_ACTIVE = 1;
     const ACTIVE_DISABLE = 2;
@@ -24,9 +24,17 @@ class Field extends Item
     public $priority;
     public $url;
     public $type;
+    /**
+     * @var SetInputData|RangeInputData
+     */
     public $inputData;
     public $active;
+
+    /**
+     * @var Value
+     */
     public $value;
+    public $valueClass = '\nofuture17\seo_filter\Value';
 
     public function __construct($data)
     {
@@ -51,15 +59,27 @@ class Field extends Item
         if (!isset($this->active)) {
             $this->active = self::ACTIVE_ACTIVE;
         }
+
+        $this->setInputData($data['inputData']);
     }
 
-    public function getValue()
-    {
-
-    }
+    abstract public function setInputData($data);
 
     public function setValue($value)
     {
+        if (!($this->value instanceof Value)) {
+            $this->value = new $this->valueClass ();
+        }
 
+        if (($value = $this->validateValue($value)) !== null) {
+            $this->value->set($value);
+        }
+    }
+
+    abstract public function validateValue($value);
+
+    public function getValue()
+    {
+        return $this->value->getValue();
     }
 }

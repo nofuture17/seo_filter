@@ -33,6 +33,35 @@ class Set
         }
     }
 
+    /**
+     * @param $url
+     * @param bool $ignoreFieldsSet
+     * @return Field|null
+     */
+    public function getItem($url, $ignoreFieldsSet = false)
+    {
+        $result = null;
+
+        if ($this->hasItem($url)) {
+            $result = $this->items[$url];
+        }
+
+        return $result;
+    }
+
+    public function hasItem($url, $ignoreFieldsSet = false)
+    {
+        return (
+            !empty($this->items[$url])
+            && (
+                $ignoreFieldsSet
+                || empty($this->itemsSet)
+                || !is_array($this->itemsSet)
+                || in_array($url, $this->itemsSet)
+            )
+        );
+    }
+
     public function reorder()
     {
         $this->sortItems('url');
@@ -84,7 +113,7 @@ class Set
         return $result;
     }
 
-    public function getItems($order = null)
+    public function getItems($order = null, $ignoreFieldsSet = false)
     {
         if (empty($order) || empty($this->orders[$order])) {
             $order = $this->defaultOrder;
@@ -93,8 +122,8 @@ class Set
         $result = [];
 
         foreach ($this->orders[$order] as $itemUrl) {
-            if (!empty($this->items[$itemUrl])) {
-                $result[$itemUrl] = $this->items[$itemUrl];
+            if ($item = $this->getItem($itemUrl, $ignoreFieldsSet)) {
+                $result[$itemUrl] = $item;
             }
         }
 

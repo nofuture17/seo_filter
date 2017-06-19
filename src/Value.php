@@ -15,12 +15,12 @@ class Value
 
     public function isEmpty()
     {
-        return true;
+        return !isset($this->valueData);
     }
 
     public function getValue()
     {
-        return null;
+        return $this->valueData;
     }
 
     public function set($data)

@@ -10,6 +10,14 @@
         }
     ],
     "minimum-stability": "dev",
+    "require": {
+        "nofuture17/php-html-generator": "dev-master"
+    },
+    "repositories": [
+        {
+            "type":"git", "url":"https://github.com/nofuture17/php-html-generator.git"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "nofuture17\\seo_filter\\": "src"

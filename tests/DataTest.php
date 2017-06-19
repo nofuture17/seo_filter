@@ -3,6 +3,7 @@
 namespace nofuture17\seo_filter_tests;
 use nofuture17\seo_filter\Data;
 use nofuture17\seo_filter\FieldFactory;
+use nofuture17\seo_filter\FieldListItem;
 
 /**
  * Created by PhpStorm.
@@ -148,6 +149,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $result['fieldsData'] = $params['fieldsData'];
         }
 
+        if (isset($params['fieldsData'])) {
+            $result['fieldsData'] = $params['fieldsData'];
+        }
+
         return $result;
     }
 
@@ -159,7 +164,22 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'url' => 'test-field',
                 'type' => FieldFactory::TYPE_CHECKBOX,
                 'priority' => 1000,
-                'inputData' => []
+                'inputData' => [
+                    [
+                        'name' => 'Тестовый вариант',
+                        'url' => 'test-value',
+                        'priority' => 1000,
+                    ],
+                    [
+                        'name' => 'Тестовый вариант2',
+                        'url' => 'test-value2',
+                    ],
+                    [
+                        'name' => 'Тестовый вариант3',
+                        'url' => 'test-value3',
+                        'active' => FieldListItem::ACTIVE_DISABLE
+                    ],
+                ]
             ],
             [
                 'name' => 'Тестовое название поля 2',
@@ -173,7 +193,12 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'url' => 'test-field3',
                 'type' => FieldFactory::TYPE_RANGE,
                 'priority' => 400,
-                'inputData' => []
+                'inputData' => [
+                    'min' => 1,
+                    'max' => 1000,
+                    'step' => 10,
+                    'unit' => 'кг/ам'
+                ]
             ],
         ];
 

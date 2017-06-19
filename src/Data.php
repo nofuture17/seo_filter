@@ -24,6 +24,7 @@ class Data implements \ArrayAccess
     public $url;
     public $text;
     public $fields = [];
+    public $fieldsSet;
 
     public function __construct($data)
     {

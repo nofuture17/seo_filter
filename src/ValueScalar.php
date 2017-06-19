@@ -11,5 +11,18 @@ namespace nofuture17\seo_filter;
 
 class ValueScalar extends Value
 {
+    public static function clearValue($dirtyValue)
+    {
+        $result = null;
 
+        if (empty($dirtyValue) && !is_bool($dirtyValue)) {
+            return $result;
+        }
+
+        if (is_array($dirtyValue)) {
+            $result = array_shift($dirtyValue);
+        }
+
+        return $result;
+    }
 }

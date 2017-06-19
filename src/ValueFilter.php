@@ -16,6 +16,17 @@ class ValueFilter
 
     public $fields;
 
+    public function __construct($value = null)
+    {
+        if (!empty($value)) {
+            if (is_string($value)) {
+                $this->addFormArray($value);
+            } else {
+                $this->addFormArray($value);
+            }
+        }
+    }
+
     public function addFromString($value)
     {
         $fields = explode(static::$fieldsDelimiter, $value);
@@ -40,5 +51,10 @@ class ValueFilter
         foreach ($value as $fieldName => $fieldValue) {
             $this->fields[$fieldName] = $fieldValue;
         }
+    }
+
+    public function isEmpty()
+    {
+        return empty($this->fields);
     }
 }
