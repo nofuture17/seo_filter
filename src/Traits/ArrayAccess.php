@@ -11,9 +11,10 @@ namespace nofuture17\seo_filter\Traits;
 
 trait ArrayAccess
 {
+
     public function offsetExists($offset)
     {
-        return property_exists($this, $offset);
+        return property_exists($this, $offset) && in_array($offset, $this->getArrayAccessFields());
     }
 
     public function offsetGet($offset)

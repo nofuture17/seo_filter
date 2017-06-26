@@ -11,7 +11,8 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "nofuture17/php-html-generator": "dev-master"
+        "nofuture17/php-html-generator": "dev-master",
+        "php-di/php-di": "^5.4"
     },
     "repositories": [
         {
